@@ -3,24 +3,24 @@ function getMessage(a, b) {
   switch (typeof a) {
     case 'boolean':
           if (a) {
-            console.log('Я попал в ' + b);
+            return('Я попал в ' + b);
           } else {
-            console.log('Я никуда не попал');
+            return('Я никуда не попал');
           }
           break;
     case 'number':
-          console.log('Я прыгнул на ' + a * 100 + ' сантиметров');
+          return('Я прыгнул на ' + a * 100 + ' сантиметров');
           break;
     case 'object':
           if (Array.isArray(a)){
             if (Array.isArray(b)){
-              console.log('Я прошёл ' + getDistancePath(a, b) + ' метров');
+              return('Я прошёл ' + getDistancePath(a, b) + ' метров');
             } else {
-              console.log('Я прошёл ' + getNumberOfSteps(a, 0) + ' шагов');
+              return('Я прошёл ' + getNumberOfSteps(a, 0) + ' шагов');
             }
           }
           break;
-    default: console.log('Переданы некорректные данные');
+    default: return('Переданы некорректные данные');
   }
 }
 
@@ -36,7 +36,7 @@ function getNumberOfSteps(arr) {
 function getDistancePath(arr1, arr2) {
   var result = 0;
 
-  for (var i = 0; i < arr1.length; i++) { // Честно говоря, сначала начал изобретать велосипед по поводу того, что длина одного массива больше, чем другая... и понеслось...=)
+  for (var i = 0; i < arr1.length; i++) {
     result += (+arr1[i] * +arr2[i]);
   }
 

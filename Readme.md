@@ -1,7 +1,7 @@
 # Личный проект «Код и Магия» [![Build status][travis-image]][travis-url] [![Dependency status][dependency-image]][dependency-url]
 
 * Студент: [Евгений Карпов](https://up.htmlacademy.ru/javascript/7/user/70583).
-* Наставник: `Неизвестно`.
+* Наставник: [Вадим Федоров](https://htmlacademy.ru/profile/id224110).
 
 ---
 

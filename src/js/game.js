@@ -198,6 +198,13 @@ window.Game = (function() {
     PAUSE: 3,
     INTRO: 4
   };
+  var VerdictMessages = [
+    ['some text to continue'],
+    ['You have won, bro!', 'seriously, i\'m impressed', 'i thought you are not so good', 'BUT YOU ARE!!!!'],
+    ['Unfortunately, you have failed!', 'But you can always try once more time,', '\'coz game is in our hearts'],
+    ['You\'ve paused the game!', 'Oh u r nasty slut!'],
+    ['Hello Master, I want to play a game.', 'For years you have burned those around you', 'with your lies, cons, and deceits.']
+  ];
 
   /**
    * Правила завершения уровня. Ключами служат ID уровней, значениями функции
@@ -408,7 +415,30 @@ window.Game = (function() {
      * Отрисовка экрана паузы.
      */
     _drawPauseScreen: function() {
-      switch (this.state.currentStatus) {
+      var canvas = document.querySelector('canvas'),
+        messageStartX = canvas.getAttribute('width') / 2 - 100,
+        messageStartY = canvas.getAttribute('height') / 2 - 100,
+        fontSize = 16,
+        fontLineHeight = 20;
+      canvas.innerHTML = 'Your browser doesn\'t support canvas element. Try jogging!';
+
+      if (canvas.getContext) {
+        var ctx = canvas.getContext('2d');
+        ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
+        ctx.fillRect(messageStartX + 10, messageStartY + 10, 440, 140);
+        ctx.fillStyle = '#ffffff';
+        ctx.fillRect(messageStartX, messageStartY, 440, 140);
+        ctx.fillStyle = '#0000ff';
+        ctx.strokeRect(messageStartX - 1, messageStartY - 1, 442, 142);
+
+        ctx.font = fontSize + 'px PT Mono';
+        ctx.textBaseline = 'hanging';
+        for (var i = 0; i < VerdictMessages[this.state.currentStatus].length; i++) {
+          ctx.fillText(VerdictMessages[this.state.currentStatus][i], messageStartX + 10, messageStartY + 10 + fontLineHeight * i);
+        }
+      }
+
+      /*switch (this.state.currentStatus) {
         case Verdict.WIN:
           console.log('you have won!');
           break;
@@ -421,7 +451,7 @@ window.Game = (function() {
         case Verdict.INTRO:
           console.log('welcome to the game! Press Space to start');
           break;
-      }
+      }*/
     },
 
     /**

@@ -419,7 +419,7 @@ window.Game = (function() {
         canvasWidth = canvas.width,
         canvasHeight = canvas.height,
         messageWidth = 440,
-        messageHeight = 140,
+        messageHeight = 20,
         strokeWidth = 1,
         messageStartX = (canvasWidth - messageWidth) / 2,
         messageStartY = (canvasHeight - messageHeight) / 2,
@@ -430,6 +430,16 @@ window.Game = (function() {
 
       if (canvas.getContext) {
         var ctx = canvas.getContext('2d');
+
+        ctx.font = fontSize + 'px PT Mono';
+        ctx.textBaseline = 'hanging';
+
+        var textHeight = this._getTextHeight(messageWidth, ctx.font, VerdictMessages[this.state.currentStatus], fontLineHeight);
+        if (textHeight > messageHeight) {
+          messageHeight = textHeight + offset * 2;
+          messageStartY = (canvasHeight - messageHeight) / 2;
+        }
+
         ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
         ctx.fillRect(messageStartX + offset, messageStartY + offset, messageWidth, messageHeight);
         ctx.fillStyle = '#ffffff';
@@ -437,10 +447,22 @@ window.Game = (function() {
         ctx.fillStyle = '#0000ff';
         ctx.strokeRect(messageStartX - strokeWidth, messageStartY - strokeWidth, messageWidth + strokeWidth * 2, messageHeight + strokeWidth * 2);
 
-        ctx.font = fontSize + 'px PT Mono';
-        ctx.textBaseline = 'hanging';
         this._fillTextToWidth(ctx, VerdictMessages[this.state.currentStatus], messageWidth, messageStartX + offset, messageStartY + offset, fontLineHeight);
       }
+    },
+
+    /**
+     * Определение высоты текста.
+     */
+
+    _getTextHeight: function(messageWidth, font, text, lineHeight) {
+      var parent = document.createElement('div');
+      document.body.appendChild(parent);
+      parent.style.cssText = 'font: ' + font + '; line-height: ' + lineHeight + 'px; width: ' + messageWidth + 'px; position: absolute; left: 0; bottom: 0';
+      parent.innerHTML += text;
+      var height = parent.offsetHeight;
+      document.body.removeChild(parent);
+      return height;
     },
 
     /**

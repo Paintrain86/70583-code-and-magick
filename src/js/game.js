@@ -199,11 +199,11 @@ window.Game = (function() {
     INTRO: 4
   };
   var VerdictMessages = [
-    ['some text to continue'],
-    ['You have won, bro!', 'seriously, i\'m impressed', 'i thought you are not so good', 'BUT YOU ARE!!!!'],
-    ['Unfortunately, you have failed!', 'But you can always try once more time,', '\'coz game is in our hearts'],
-    ['You\'ve paused the game!', 'Oh u r nasty slut!'],
-    ['Hello Master, I want to play a game.', 'For years you have burned those around you', 'with your lies, cons, and deceits.']
+    'some text to continue',
+    'You have won, bro! Seriously, i am impressed coz i thought you are not so good... BUT YOU ARE!!!!',
+    'Unfortunately, you have failed! But you can always try once more time, coz game is in our hearts',
+    'You have paused the game! Oh u r nasty slut!',
+    'Hello Master, I want to play a game. For years you have burned those around you with your lies, cons, and deceits.'
   ];
 
   /**
@@ -416,8 +416,14 @@ window.Game = (function() {
      */
     _drawPauseScreen: function() {
       var canvas = document.querySelector('canvas'),
-        messageStartX = canvas.getAttribute('width') / 2 - 100,
-        messageStartY = canvas.getAttribute('height') / 2 - 100,
+        canvasWidth = canvas.width,
+        canvasHeight = canvas.height,
+        messageWidth = 440,
+        messageHeight = 140,
+        strokeWidth = 1,
+        messageStartX = (canvasWidth - messageWidth) / 2,
+        messageStartY = (canvasHeight - messageHeight) / 2,
+        offset = 10,
         fontSize = 16,
         fontLineHeight = 20;
       canvas.innerHTML = 'Your browser doesn\'t support canvas element. Try jogging!';
@@ -425,33 +431,36 @@ window.Game = (function() {
       if (canvas.getContext) {
         var ctx = canvas.getContext('2d');
         ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
-        ctx.fillRect(messageStartX + 10, messageStartY + 10, 440, 140);
+        ctx.fillRect(messageStartX + offset, messageStartY + offset, messageWidth, messageHeight);
         ctx.fillStyle = '#ffffff';
-        ctx.fillRect(messageStartX, messageStartY, 440, 140);
+        ctx.fillRect(messageStartX, messageStartY, messageWidth, messageHeight);
         ctx.fillStyle = '#0000ff';
-        ctx.strokeRect(messageStartX - 1, messageStartY - 1, 442, 142);
+        ctx.strokeRect(messageStartX - strokeWidth, messageStartY - strokeWidth, messageWidth + strokeWidth * 2, messageHeight + strokeWidth * 2);
 
         ctx.font = fontSize + 'px PT Mono';
         ctx.textBaseline = 'hanging';
-        for (var i = 0; i < VerdictMessages[this.state.currentStatus].length; i++) {
-          ctx.fillText(VerdictMessages[this.state.currentStatus][i], messageStartX + 10, messageStartY + 10 + fontLineHeight * i);
+        this._fillTextToWidth(ctx, VerdictMessages[this.state.currentStatus], messageWidth, messageStartX + offset, messageStartY + offset, fontLineHeight);
+      }
+    },
+
+    /**
+     * Отрисовка шрифта на канвасе заданной ширины.
+     */
+    _fillTextToWidth: function(ctx, text, widthMax, lineStartX, lineStartY, lineHeight) {
+      var words = text.split(' '),
+        lineDefault = '';
+      for (var i = 0; i < words.length; i++) {
+        var testLine = lineDefault + words[i] + ' ';
+        var testWidth = ctx.measureText(testLine).width;
+        if (testWidth > widthMax) {
+          ctx.fillText(lineDefault, lineStartX, lineStartY);
+          lineDefault = words[i] + ' ';
+          lineStartY += lineHeight;
+        } else {
+          lineDefault = testLine;
         }
       }
-
-      /*switch (this.state.currentStatus) {
-        case Verdict.WIN:
-          console.log('you have won!');
-          break;
-        case Verdict.FAIL:
-          console.log('you have failed!');
-          break;
-        case Verdict.PAUSE:
-          console.log('game is on pause!');
-          break;
-        case Verdict.INTRO:
-          console.log('welcome to the game! Press Space to start');
-          break;
-      }*/
+      ctx.fillText(lineDefault, lineStartX, lineStartY);
     },
 
     /**

@@ -1,3 +1,5 @@
+/*eslint-disable*/
+
 'use strict';
 var validator = {
   ratingCurrent: '',
@@ -57,6 +59,20 @@ window.form = (function() {
     labelText = document.querySelector('.review-fields-text'),
     formSubmitButton = document.querySelector('.review-submit');
 
+  var getExpireDays = function() {
+    var now = new Date(),
+      nowYear = now.getFullYear(),
+      hopperHB = new Date(nowYear + '-12-9'),
+      diff = 0;
+    if (now < hopperHB) {
+      hopperHB = new Date(nowYear - 1 + '-12-9');
+      diff = now - hopperHB;
+    } else {
+      diff = hopperHB - now;
+    }
+    return Math.floor(diff / (1000 * 3600 * 24 ));
+  };
+
   var form = {
     onClose: null,
 
@@ -65,6 +81,13 @@ window.form = (function() {
      */
     open: function(cb) {
       formContainer.classList.remove('invisible');
+      if (typeof Cookies.get('review-name') !== 'undefined') {
+        inputName.value = Cookies.get('review-name');
+      }
+      if (typeof Cookies.get('review-mark') !== 'undefined') {
+        formRate = document.querySelector('#review-mark-' + Cookies.get('review-mark'));
+        formRate.checked = true;
+      }
       validator.checkValidForm(inputName, inputText, formRate, labelName, labelText, blockControls, formSubmitButton);
       cb();
     },
@@ -85,10 +108,14 @@ window.form = (function() {
   };
 
   blockRates.onchange = function(evt) {
+    Cookies.set('review-mark', evt.target.value, { expires: getExpireDays()});
     validator.checkValidForm(inputName, inputText, evt.target, labelName, labelText, blockControls, formSubmitButton);
   };
 
-  formElem.oninput = function() {
+  formElem.oninput = function(evt) {
+    if (evt.target === inputName) {
+      Cookies.set('review-name', evt.target.value, { expires: getExpireDays()});
+    }
     validator.checkValidForm(inputName, inputText, formRate, labelName, labelText, blockControls, formSubmitButton);
   };
 

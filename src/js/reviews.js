@@ -146,10 +146,10 @@ var IMAGE_LOAD_TIMEOUT = 3000;
 
 initializeReviews();
 
-function toggleFilterBlock(hide) {
-  if (typeof hide === 'undefined') {
+function toggleFilterBlock(action) {
+  if (action === 'hide') {
     reviewsFilterBlock.classList.add('invisible');
-  } else {
+  } else if (action === 'show') {
     reviewsFilterBlock.classList.remove('invisible');
   }
 }
@@ -175,6 +175,7 @@ function getReviewItem(item) {
   img.src = item.author.picture;
 
   imgTimeout = setTimeout(function() {
+    img.src = '';
     reviewItem.classList.add('review-load-failure');
   }, IMAGE_LOAD_TIMEOUT);
 
@@ -187,7 +188,7 @@ function renderReviews(items) {
       reviewsList.appendChild(getReviewItem(item));
     });
     if (reviewsList.children.length > 0) {
-      toggleFilterBlock(1);
+      toggleFilterBlock('show');
     } else {
       showNoReviewsMessage();
     }
@@ -202,6 +203,6 @@ function showNoReviewsMessage() {
 }
 
 function initializeReviews() {
-  toggleFilterBlock();
+  toggleFilterBlock('hide');
   renderReviews(reviews);
 }

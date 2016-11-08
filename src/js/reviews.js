@@ -6,7 +6,7 @@ var reviewsFilterBlock = document.querySelector('.reviews-filter'),
   tpl = document.getElementById('review-template'),
   tplContainer = 'content' in tpl ? tpl.content : tpl;
 var IMAGE_LOAD_TIMEOUT = 3000,
-  REVIEW_LIST_URL = 'http://localhost:1507/api/reviews?callback=';
+  REVIEW_LIST_URL = 'http://localhost:1507/api/reviews';
 
 initializeReviews();
 
@@ -47,8 +47,9 @@ function getReviewItem(item) {
 }
 
 function renderReviews(items) {
-  if (Array.isArray(items)) {
-    items.forEach(function(item) {
+  reviews = items;
+  if (Array.isArray(reviews)) {
+    reviews.forEach(function(item) {
       reviewsList.appendChild(getReviewItem(item));
     });
     if (reviewsList.children.length > 0) {
@@ -66,28 +67,18 @@ function showNoReviewsMessage() {
   reviewsList.textContent = 'К этой классной игре пока никто не оставил ни одного отзыва :(';
 }
 
-function loadReviewsData(url, cbName) {
-  if (!cbName) {
-    showNoReviewsMessage();
-  } else {
-    if (typeof window[cbName] !== 'function') {
-      window[cbName] = function(data) {
-        reviews = data;
-      };
-    }
+function loadJSONP(url, cbFunc) {
+  var jsonpCallbackName = 'myJsonp' + Date.now();
+  window[jsonpCallbackName] = cbFunc;
 
-    var reviewsScript = document.createElement('script');
-    reviewsScript.onload = function() {
-      renderReviews(reviews);
-    };
-    reviewsScript.onerror = function() {
-      console.log('Алярма!!! Проблема с сервером, перезвоните позднее!');
-    };
-    reviewsScript.src = url + cbName;
-    document.body.appendChild(reviewsScript);
-  }
+  var reviewsScript = document.createElement('script');
+  reviewsScript.onerror = function() {
+    console.log('Алярма!!! Проблема с сервером, перезвоните позднее!');
+  };
+  reviewsScript.src = url + '?callback=' + jsonpCallbackName;
+  document.body.appendChild(reviewsScript);
 }
 function initializeReviews() {
   toggleFilterBlock('hide');
-  loadReviewsData(REVIEW_LIST_URL, 'setReviews');
+  loadJSONP(REVIEW_LIST_URL, renderReviews);
 }

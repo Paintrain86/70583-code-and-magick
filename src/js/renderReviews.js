@@ -45,6 +45,7 @@ function getReviewItem(item) {
 
 function renderReviews(items) {
   reviews = items;
+  toggleFilterBlock('hide');
   if (Array.isArray(reviews)) {
     reviews.forEach(function(item) {
       reviewsList.appendChild(getReviewItem(item));
@@ -63,4 +64,7 @@ function showNoReviewsMessage() {
   reviewsList.style.textAlign = 'center';
   reviewsList.textContent = 'К этой классной игре пока никто не оставил ни одного отзыва :(';
 }
-return renderReviews;
+
+define(function() {
+  return renderReviews;
+});

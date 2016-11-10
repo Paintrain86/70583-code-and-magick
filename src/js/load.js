@@ -11,4 +11,7 @@ function loadJSONP(url, cbFunc) {
   reviewsScript.src = url + '?callback=' + jsonpCallbackName;
   document.body.appendChild(reviewsScript);
 }
-return loadJSONP;
+
+define(function() {
+  return loadJSONP;
+});

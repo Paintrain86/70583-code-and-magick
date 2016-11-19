@@ -650,6 +650,11 @@ window.Game = function() {
       }
     },
 
+    init: function() {
+      this.initializeLevelAndStart();
+      this.setGameStatus(window.Game.Verdict.INTRO);
+    },
+
     /**
      * Отрисовка всех объектов на экране.
      */

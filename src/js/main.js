@@ -1,4 +1,6 @@
 'use strict';
+var gameBlock = document.querySelector('.demo');
+var formOpenButton = document.querySelector('.reviews-controls-new');
 
 define([
   './reviews',
@@ -11,11 +13,8 @@ define([
   window.Game = game();
 });
 
-var game = new window.Game(document.querySelector('.demo'));
-game.initializeLevelAndStart();
-game.setGameStatus(window.Game.Verdict.INTRO);
-
-var formOpenButton = document.querySelector('.reviews-controls-new');
+var game = new window.Game(gameBlock);
+game.init();
 
 /** @param {MouseEvent} evt */
 formOpenButton.onclick = function(evt) {

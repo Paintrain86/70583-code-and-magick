@@ -18,25 +18,26 @@ var Gallery = function(pictures) {
 
 Gallery.prototype.show = function(num) {
   var obj = this;
-  this.elements.closeElem.onclick = obj.hide;
-  this.elements.controls.left.onclick = this.elements.controls.right.onclick = function(e) {
+  obj.elements.closeElem.onclick = obj.hide.bind(obj);
+  obj.elements.total.innerText = obj.pictures.length;
+
+  obj.elements.controls.left.onclick = obj.elements.controls.right.onclick = function(e) {
     if (e.target.classList.contains('overlay-gallery-control-left')) {
-      if (Number(this.activePicture) >= 1) {
+      if (Number(obj.activePicture) >= 1) {
         obj.setActivePicture(Number(obj.activePicture) - 1);
       }
     } else {
-      if (Number(this.activePicture) <= obj.pictures.length - 2) {
+      if (Number(obj.activePicture) <= obj.pictures.length - 2) {
         obj.setActivePicture(Number(obj.activePicture) + 1);
       }
     }
   };
-  this.elements.overlay.classList.remove('invisible');
-  this.setActivePicture(num);
+  obj.elements.overlay.classList.remove('invisible');
+  obj.setActivePicture(num);
 };
 Gallery.prototype.hide = function() {
-  var obj = this;
-  obj.elements.overlay.classList.add('invisible');
-  obj.elements.controls.left.onclick = obj.elements.controls.right.onclick = null;
+  this.elements.overlay.classList.add('invisible');
+  this.elements.controls.left.onclick = this.elements.controls.right.onclick = null;
 };
 Gallery.prototype.setActivePicture = function(num) {
   this.activePicture = num;
@@ -49,7 +50,7 @@ Gallery.prototype.setActivePicture = function(num) {
   }
   galleryPreview.appendChild(img);
 
-  this.elements.current.innerText = this.activePicture;
+  this.elements.current.innerText = this.activePicture + 1;
 };
 
 define(function() {

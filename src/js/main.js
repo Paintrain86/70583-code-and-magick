@@ -44,7 +44,7 @@ for (var i = 0; i < galleryImages.length; i++) {
 
 var gallery = new window.Gallery(gallerySources);
 for (var j = 0; j < gallerySources.length; j++) {
-  galleryElements[j].addEventListener('click', function() {
-    gallery.show(j);
-  }, 'false');
+  galleryElements[j].addEventListener('click', function(bindJ) {
+    gallery.show(bindJ);
+  }.bind(null, j), 'false');
 }

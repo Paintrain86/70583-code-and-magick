@@ -15,7 +15,7 @@ define([
   var loadReviews = function(filter, pageCurrent) {
     load(REVIEW_LIST_URL, {
       from: pageCurrent * pageSize,
-      to: pageCurrent * pageSize,
+      to: pageCurrent * pageSize + pageSize,
       filter: filter
     }, renderReviews);
   };

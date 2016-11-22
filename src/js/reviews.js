@@ -21,14 +21,14 @@ define([
   };
 
   var changeFilters = function(filterID) {
-    reviewsContainer.innerHtml = '';
+    reviewsContainer.innerHTML = '';
     activeFilter = (typeof filterID === 'undefined') ? activeFilter : filterID;
     pageActive = 0;
     loadReviews(activeFilter, pageActive);
   };
 
-  reviewsFilter.addEventListener('click', function(e) {
-    if (e.target.classList.contains('reviews-filter-item')) {
+  reviewsFilter.addEventListener('change', function(e) {
+    if (e.target.name === 'reviews') {
       if (e.target.id !== activeFilter) {
         changeFilters(e.target.id);
       }

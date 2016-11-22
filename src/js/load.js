@@ -10,7 +10,7 @@ define(function() {
   return function(url, params, cbFunc) {
     var xhr = new XMLHttpRequest();
     xhr.onload = function(e) {
-      var loadedData = JSON.parse(e.target.response);
+      var loadedData = JSON.parse(e.currentTarget.response);
       cbFunc(loadedData);
     };
     xhr.open('GET', url + '?' + getSearch(params));

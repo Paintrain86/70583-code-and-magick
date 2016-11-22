@@ -9,6 +9,7 @@ define([
   var activeFilter = 'reviews-all';
   var reviewsContainer = document.querySelector('.reviews-list');
   var reviewsFilter = document.querySelector('.reviews-filter');
+  var reviewsMore = document.querySelector('.reviews-controls-more');
   var pageActive = 0;
   var pageSize = 3;
 
@@ -34,6 +35,11 @@ define([
       }
     }
   });
+
+  reviewsMore.addEventListener('click', function() {
+    loadReviews(activeFilter, ++pageActive);
+  });
+
   // var lastCall = Date.now();
 
   return changeFilters;

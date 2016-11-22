@@ -1,17 +1,19 @@
 'use strict';
 
-function loadJSONP(url, cbFunc) {
-  var jsonpCallbackName = 'myJsonp' + Date.now();
-  window[jsonpCallbackName] = cbFunc;
-
-  var reviewsScript = document.createElement('script');
-  reviewsScript.onerror = function() {
-    console.log('Алярма!!! Проблема с сервером, перезвоните позднее!');
-  };
-  reviewsScript.src = url + '?callback=' + jsonpCallbackName;
-  document.body.appendChild(reviewsScript);
-}
-
 define(function() {
-  return loadJSONP;
+  function getSearch(params) {
+    return Object.keys(params).map(function(param) {
+      return [param, params[param]].join('=');
+    }).join('&');
+  }
+
+  return function(url, params, cbFunc) {
+    var xhr = new XMLHttpRequest();
+    xhr.onload = function(e) {
+      var loadedData = JSON.parse(e.currentTarget.response);
+      cbFunc(loadedData);
+    };
+    xhr.open('GET', url + '?' + getSearch(params));
+    xhr.send();
+  };
 });

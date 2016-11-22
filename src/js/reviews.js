@@ -36,6 +36,7 @@ define([
     }
   });
 
+  reviewsMore.classList.remove('invisible');
   reviewsMore.addEventListener('click', function() {
     loadReviews(activeFilter, ++pageActive);
   });

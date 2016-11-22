@@ -1,4 +1,3 @@
-/*eslint-disable*/
 'use strict';
 var reviews = [];
 
@@ -15,7 +14,7 @@ function toggleFilterBlock(action) {
 }
 
 function getReviewItem(item) {
-  var reviewItem = new Review(item);
+  var reviewItem = new window.Review(item);
   reviewItem.element.querySelector('.review-rating').textContent = item.rating;
   reviewItem.element.querySelector('.review-text').textContent = item.description;
 
@@ -64,6 +63,9 @@ function showNoReviewsMessage() {
   reviewsList.textContent = 'К этой классной игре пока никто не оставил ни одного отзыва :(';
 }
 
-define(function() {
+define([
+  './review'
+], function(review) {
+  window.Review = review;
   return renderReviews;
 });

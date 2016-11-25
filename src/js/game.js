@@ -6,10 +6,19 @@ window.Game = function() {
    * @type {number}
    */
   var THROTTLE = 100;
-  var lastCloudCall = Date.now();
-  // var defaultPosition = 'center top';
-  // var demoBlock = document.querySelector('.demo');
+
+  /**
+   * @var
+   * @type {selector}
+   */
+  var demoBlock = document.querySelector('.demo');
   var cloudBlock = document.querySelector('.header-clouds');
+
+  /**
+   * @var
+   * @type {date}
+   */
+  var lastScrollCall = Date.now();
 
   /**
    * @const
@@ -287,6 +296,7 @@ window.Game = function() {
 
     this._onKeyDown = this._onKeyDown.bind(this);
     this._onKeyUp = this._onKeyUp.bind(this);
+    this._onScroll = this._onScroll.bind(this);
     this._pauseListener = this._pauseListener.bind(this);
 
     this.setDeactivated(false);
@@ -761,12 +771,16 @@ window.Game = function() {
       }
     },
     _onScroll: function() {
-      if (cloudBlock.getBoundingClientRect().bottom - window.innerHeight > 0) {
-        var callDifferenceStep = (cloudBlock.getBoundingClientRect().bottom - window.innerHeight) / 5;
-        console.log(callDifferenceStep);
-        cloudBlock.style.backgroundPositionX = 50 - callDifferenceStep + '%';
+      var scrollVisibleClouds = cloudBlock.getBoundingClientRect().bottom;
+      if (scrollVisibleClouds > 0) {
+        cloudBlock.style.backgroundPositionX = 50 - (cloudBlock.clientHeight - scrollVisibleClouds) / 10 + '%';
       }
-
+      if (Date.now() - lastScrollCall > THROTTLE) {
+        if (demoBlock.getBoundingClientRect().bottom < 0) {
+          this.setGameStatus(Verdict.PAUSE);
+        }
+        lastScrollCall = Date.now();
+      }
     },
 
     /** @private */
